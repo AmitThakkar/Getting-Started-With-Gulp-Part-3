@@ -27,9 +27,9 @@ gulp.task('scripts', function () {
 
 // HTMLs Task
 // Uglify
-gulp.task('htmls', function() {
-   gulp.src('public/*html')
-       .pipe(livereload());
+gulp.task('htmls', function () {
+    gulp.src('public/*html')
+        .pipe(livereload());
 });
 
 // Watch Task
