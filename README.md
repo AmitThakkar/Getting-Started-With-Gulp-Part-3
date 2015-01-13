@@ -1,4 +1,6 @@
-#Run-NodeJS-App-with-GulpJS
+#Getting Started with GulpJS Part-3
+
+####This repository contains getting started guild with GulpJS Part 3.
 
 In my previous [blog]() we write **Gulp** task to minify all the ```.js``` files then concat them into one ```all.js``` file, and watch all the ```.js``` files, if any change happen to any ```.js``` file, we were rerunning the minify and concat task and we were doing live reloading the **HTML** on chrome browser.
 
