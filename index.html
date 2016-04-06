@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Getting-started-with-gulp-part-3 by AmitThakkar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Getting-started-with-gulp-part-3</h1>
+      <h2 class="project-tagline">This repository contains getting started guild with GulpJS Part 3.</h2>
+      <a href="https://github.com/AmitThakkar/Getting-Started-With-Gulp-Part-3" class="btn">View on GitHub</a>
+      <a href="https://github.com/AmitThakkar/Getting-Started-With-Gulp-Part-3/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/AmitThakkar/Getting-Started-With-Gulp-Part-3/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="getting-started-with-gulpjs-part-3" class="anchor" href="#getting-started-with-gulpjs-part-3" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Getting Started with GulpJS Part-3</h1>
+
+<h4>
+<a id="this-repository-contains-getting-started-guild-with-gulpjs-part-3" class="anchor" href="#this-repository-contains-getting-started-guild-with-gulpjs-part-3" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>This repository contains getting started guild with GulpJS Part 3.</h4>
+
+<p>In my previous <a href="">blog</a> we write <strong>Gulp</strong> task to minify all the <code>.js</code> files then concat them into one <code>all.js</code> file, and watch all the <code>.js</code> files, if any change happen to any <code>.js</code> file, we were rerunning the minify and concat task and we were doing live reloading the <strong>HTML</strong> on chrome browser.</p>
+
+<p>Here is code of previous <strong>gulpfile.js</strong>:</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> gulp <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>gulp<span class="pl-pds">'</span></span>),
+    uglify <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>gulp-uglify<span class="pl-pds">'</span></span>),
+    concat <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>gulp-concat<span class="pl-pds">'</span></span>), <span class="pl-c">// Requiring gulp-concat task.</span>
+    livereload <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>gulp-livereload<span class="pl-pds">'</span></span>); <span class="pl-c">// Requiring gulp-livereload task.</span>
+<span class="pl-k">function</span> <span class="pl-en">errorLog</span>(<span class="pl-smi">error</span>) {
+    <span class="pl-en">console</span>.<span class="pl-c1">error</span>(error);
+    <span class="pl-v">this</span>.<span class="pl-en">emit</span>(<span class="pl-s"><span class="pl-pds">'</span>end<span class="pl-pds">'</span></span>);
+}
+<span class="pl-smi">gulp</span>.<span class="pl-en">task</span>(<span class="pl-s"><span class="pl-pds">'</span>scripts<span class="pl-pds">'</span></span>, <span class="pl-k">function</span> () {
+    <span class="pl-smi">gulp</span>.<span class="pl-en">src</span>(<span class="pl-s"><span class="pl-pds">'</span>js/*.js<span class="pl-pds">'</span></span>)
+        .<span class="pl-en">pipe</span>(<span class="pl-en">uglify</span>())
+        .<span class="pl-en">on</span>(<span class="pl-s"><span class="pl-pds">'</span>error<span class="pl-pds">'</span></span>, errorLog)
+        .<span class="pl-en">pipe</span>(<span class="pl-en">concat</span>(<span class="pl-s"><span class="pl-pds">'</span>all.js<span class="pl-pds">'</span></span>)) <span class="pl-c">// Adding concat task here</span>
+        .<span class="pl-en">pipe</span>(<span class="pl-smi">gulp</span>.<span class="pl-en">dest</span>(<span class="pl-s"><span class="pl-pds">'</span>build/js<span class="pl-pds">'</span></span>))
+        .<span class="pl-en">pipe</span>(<span class="pl-en">livereload</span>()); <span class="pl-c">// Adding livereload task here. Which creates a livereload server.</span>
+});
+<span class="pl-smi">gulp</span>.<span class="pl-en">task</span>(<span class="pl-s"><span class="pl-pds">'</span>watch<span class="pl-pds">'</span></span>, <span class="pl-k">function</span> () {
+    <span class="pl-smi">livereload</span>.<span class="pl-en">listen</span>(); <span class="pl-c">// Calling lister on livereload task, which will start listening for livereload client.</span>
+    <span class="pl-smi">gulp</span>.<span class="pl-c1">watch</span>(<span class="pl-s"><span class="pl-pds">'</span>js/*.js<span class="pl-pds">'</span></span>, [<span class="pl-s"><span class="pl-pds">'</span>scripts<span class="pl-pds">'</span></span>]);
+});
+<span class="pl-smi">gulp</span>.<span class="pl-en">task</span>(<span class="pl-s"><span class="pl-pds">'</span>default<span class="pl-pds">'</span></span>, [<span class="pl-s"><span class="pl-pds">'</span>scripts<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>watch<span class="pl-pds">'</span></span>]);</pre></div>
+
+<p>Now in this blog, we will run a <strong>NodeJS</strong> application with <strong>GulpJS</strong>. And on successful start, we open application URL on google chrome browser by <strong>Gulp</strong> task so developer should not require to open that URL manually. And This time we will add <strong>JSHint</strong>, which will tell us compile time errors before running the application.</p>
+
+<p>Lets install <strong>gulp.nodemon</strong>, <strong>gulp-jshint</strong> and <strong>gulp-open</strong> modules and add then require them.</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> gulp <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>gulp<span class="pl-pds">'</span></span>),
+    uglify <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>gulp-uglify<span class="pl-pds">'</span></span>),
+    concat <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>gulp-concat<span class="pl-pds">'</span></span>), <span class="pl-c">// Requiring gulp-concat task.</span>
+    livereload <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>gulp-livereload<span class="pl-pds">'</span></span>), <span class="pl-c">// Requiring gulp-livereload task.</span>
+    nodemon <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>gulp-nodemon<span class="pl-pds">'</span></span>),
+    jshint <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>gulp-jshint<span class="pl-pds">'</span></span>),
+    open <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">"</span>gulp-open<span class="pl-pds">"</span></span>);
+<span class="pl-k">function</span> <span class="pl-en">errorLog</span>(<span class="pl-smi">error</span>) {
+    <span class="pl-en">console</span>.<span class="pl-c1">error</span>(error);
+    <span class="pl-v">this</span>.<span class="pl-en">emit</span>(<span class="pl-s"><span class="pl-pds">'</span>end<span class="pl-pds">'</span></span>);
+}
+<span class="pl-smi">gulp</span>.<span class="pl-en">task</span>(<span class="pl-s"><span class="pl-pds">'</span>scripts<span class="pl-pds">'</span></span>, <span class="pl-k">function</span> () {
+    <span class="pl-smi">gulp</span>.<span class="pl-en">src</span>(<span class="pl-s"><span class="pl-pds">'</span>public/scripts/*.js<span class="pl-pds">'</span></span>)
+        .<span class="pl-en">pipe</span>(<span class="pl-en">uglify</span>())
+        .<span class="pl-en">on</span>(<span class="pl-s"><span class="pl-pds">'</span>error<span class="pl-pds">'</span></span>, errorLog)
+        .<span class="pl-en">pipe</span>(<span class="pl-en">concat</span>(<span class="pl-s"><span class="pl-pds">'</span>all.js<span class="pl-pds">'</span></span>)) <span class="pl-c">// Adding concat task here</span>
+        .<span class="pl-en">pipe</span>(<span class="pl-smi">gulp</span>.<span class="pl-en">dest</span>(<span class="pl-s"><span class="pl-pds">'</span>build/scripts<span class="pl-pds">'</span></span>))
+        .<span class="pl-en">pipe</span>(<span class="pl-en">livereload</span>()); <span class="pl-c">// Adding livereload task here. Which creates a livereload server.</span>
+});
+<span class="pl-smi">gulp</span>.<span class="pl-en">task</span>(<span class="pl-s"><span class="pl-pds">'</span>htmls<span class="pl-pds">'</span></span>, <span class="pl-k">function</span> () {
+    <span class="pl-smi">gulp</span>.<span class="pl-en">src</span>(<span class="pl-s"><span class="pl-pds">'</span>public/*html<span class="pl-pds">'</span></span>)
+        .<span class="pl-en">pipe</span>(<span class="pl-en">livereload</span>());
+});
+<span class="pl-smi">gulp</span>.<span class="pl-en">task</span>(<span class="pl-s"><span class="pl-pds">'</span>watch<span class="pl-pds">'</span></span>, <span class="pl-k">function</span> () {
+    <span class="pl-smi">livereload</span>.<span class="pl-en">listen</span>(); <span class="pl-c">// Calling lister on livereload task, which will start listening for livereload client.</span>
+    <span class="pl-smi">gulp</span>.<span class="pl-c1">watch</span>(<span class="pl-s"><span class="pl-pds">'</span>public/scripts/*.js<span class="pl-pds">'</span></span>, [<span class="pl-s"><span class="pl-pds">'</span>scripts<span class="pl-pds">'</span></span>]);
+    <span class="pl-smi">gulp</span>.<span class="pl-c1">watch</span>(<span class="pl-s"><span class="pl-pds">'</span>public/*.html<span class="pl-pds">'</span></span>, [<span class="pl-s"><span class="pl-pds">'</span>htmls<span class="pl-pds">'</span></span>]);
+});
+<span class="pl-smi">gulp</span>.<span class="pl-en">task</span>(<span class="pl-s"><span class="pl-pds">'</span>lint<span class="pl-pds">'</span></span>, <span class="pl-k">function</span> () {
+    <span class="pl-smi">gulp</span>.<span class="pl-en">src</span>(<span class="pl-s"><span class="pl-pds">'</span>./**/*.js<span class="pl-pds">'</span></span>)
+        .<span class="pl-en">pipe</span>(<span class="pl-en">jshint</span>());
+});
+<span class="pl-smi">gulp</span>.<span class="pl-en">task</span>(<span class="pl-s"><span class="pl-pds">'</span>nodejs<span class="pl-pds">'</span></span>, <span class="pl-k">function</span> () {
+    <span class="pl-smi">livereload</span>.<span class="pl-en">listen</span>(); <span class="pl-c">// Calling lister on livereload task, which will start listening for livereload client.</span>
+    <span class="pl-en">nodemon</span>({script<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>app.js<span class="pl-pds">'</span></span>, ext<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>js<span class="pl-pds">'</span></span>, ignore<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>build/<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>public/<span class="pl-pds">'</span></span>]})
+        .<span class="pl-en">on</span>(<span class="pl-s"><span class="pl-pds">'</span>change<span class="pl-pds">'</span></span>, [<span class="pl-s"><span class="pl-pds">'</span>lint<span class="pl-pds">'</span></span>])
+        .<span class="pl-en">on</span>(<span class="pl-s"><span class="pl-pds">'</span>restart<span class="pl-pds">'</span></span>, <span class="pl-k">function</span> () {
+            <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>restarted!<span class="pl-pds">'</span></span>)
+        });
+});
+<span class="pl-smi">gulp</span>.<span class="pl-en">task</span>(<span class="pl-s"><span class="pl-pds">'</span>open<span class="pl-pds">'</span></span>, <span class="pl-k">function</span> () {
+    <span class="pl-k">var</span> options <span class="pl-k">=</span> {
+        url<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>http://localhost:3000<span class="pl-pds">'</span></span>
+    };
+    <span class="pl-smi">gulp</span>.<span class="pl-en">src</span>(<span class="pl-s"><span class="pl-pds">'</span>./public/index.html<span class="pl-pds">'</span></span>)
+        .<span class="pl-en">pipe</span>(<span class="pl-en">open</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>, options));
+});
+<span class="pl-smi">gulp</span>.<span class="pl-en">task</span>(<span class="pl-s"><span class="pl-pds">'</span>default<span class="pl-pds">'</span></span>, [<span class="pl-s"><span class="pl-pds">'</span>scripts<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>watch<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>lint<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>nodejs<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>open<span class="pl-pds">'</span></span>]);</pre></div>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/AmitThakkar/Getting-Started-With-Gulp-Part-3">Getting-started-with-gulp-part-3</a> is maintained by <a href="https://github.com/AmitThakkar">AmitThakkar</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
